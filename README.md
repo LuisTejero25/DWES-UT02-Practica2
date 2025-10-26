@@ -7,5 +7,5 @@ Práctica 2 de DWES - Arrays multidimensionales y pagos en PHP
 - `README.md`: documentación del proyecto
 
 ## Autor
-Luis Tejero  
+Luis Antonio Tejero Cerda 
 [GitHub Profile](https://github.com/LuisTejero25)
