@@ -1,4 +1,5 @@
 <?php
+
 // ARRAY INDEXADO
 // Un array indexado usa claves numéricas automáticamente asignadas.
 // Se define con la sintaxis: array(valor1, valor2, valor3)
@@ -82,7 +83,7 @@ foreach ($socios as &$socio) {
 
 // Se elimina la referencia activa para evitar efectos secundarios
 unset($socio); 
-
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -110,28 +111,34 @@ unset($socio);
            <strong>Teléfono:</strong> <?= $socio["telefono"] ?></p>
 
         <!-- Tabla que muestra los pagos mensuales del socio -->
-        <table>
+           <table>
             <tr>
                 <th>Mes</th>
                 <th>Importe (€)</th>
                 <th>Estado</th>
                 <th>Fecha de Pago</th>
             </tr>
-             <!-- Bucle que recorre los pagos del socio -->
-            <?php foreach ($socio["pagos"] as $clave => $pago): ?>
-                <tr class="<?= strtolower($pago["estado"]) ?>">
-                     <!-- Nombre del mes -->
-                    <td><?= $pago["mes"] ?></td>
-                    <!-- Importe de la cuota mensual -->
-                    <td><?= number_format($pago["importe"], 2, ',', '.') ?></td>
-                     <!-- Estado del pago: Pagado o Pendiente -->
-                    <td><?= $pago["estado"] ?></td>
-                     <!-- Fecha de pago si está pagado, o guion si está pendiente -->
-                    <td><?= $pago["fecha"] ?? "—" ?></td>
-                </tr>
-            <?php endforeach; ?>
+            <?php 
+            $totalAbonado = 0;
+            foreach ($socio["pagos"] as $clave => $pago) {              
+                if ($pago["estado"] === "Pagado") {
+                    $totalAbonado += $pago["importe"];
+                }
+                echo '<tr class="' . strtolower($pago["estado"]) . '">';
+                echo '<td>' . $pago["mes"] . '</td>';
+                echo '<td>' . number_format($pago["importe"], 2, ',', '.') . '</td>';
+                echo '<td>' . $pago["estado"] . '</td>';
+                echo '<td>' . ($pago["fecha"] ?? "—") . '</td>';
+                echo '</tr>';
+            }
+            ?>
+            <!--Muestra el total de los pagos con el fondo en gris.-->
+            <tr style="background-color:#e2e3e5;">
+                <td colspan="4" style="text-align: right; font-weight: bold;">
+                    Total abonado en el año: <?php echo number_format($totalAbonado, 2, ',', '.'); ?> €
+                </td>
+            </tr>
         </table>
-        <!-- Separador visual entre socios -->
         <hr>
     <?php endforeach; ?>
 </body>
