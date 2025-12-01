@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pagos del Usuario</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        table { border-collapse: collapse; width: 50%; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        .pagado { color: green; font-weight: bold; }
+        .pendiente { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Datos del Usuario</h1>
+    <p><strong>Nombre:</strong> {{ usuario.nombre }} {{ usuario.apellidos }}</p>
+    <p><strong>DNI:</strong> {{ usuario.dni }}</p>
+    <p><strong>Email:</strong> {{ usuario.email }}</p>
+    <p><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
+
+    <h2>Pagos Mensuales</h2>
+    <table>
+        <tr>
+            <th>Mes</th>
+            <th>Estado</th>
+        </tr>
+        {% for mes, cantidad in usuario.pagos.items %}
+        <tr>
+            <td>{{ mes|title }}</td>
+            <td>
+                {% if cantidad > 0 %}
+                    <span class="pagado">PAGADO</span>
+                {% else %}
+                    <span class="pendiente">PENDIENTE</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>Total pagado en el año: {{ total_pagado }} €</h3>
+</body>
+</html>
