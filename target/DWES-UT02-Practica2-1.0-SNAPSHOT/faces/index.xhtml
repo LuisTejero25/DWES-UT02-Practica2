@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Listado de Socios y Pagos Mensuales</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        .pagado { background-color: #d4edda; }
+        .pendiente { background-color: #f8d7da; }
+        .total { background-color: #e2e3e5; font-weight: bold; text-align: right; padding: 10px; }
+        .menor { color: red; }
+        .mayor { color: green; }
+    </style>
+</h:head>
+
+<h:body>
+    <h1>Listado de Socios y Pagos Mensuales</h1>
+
+    <ui:repeat value="#{helloBean.usuarios}" var="u">
+        <h2>#{u.nombre} #{u.apellidos} (ID: #{u.id})</h2>
+        <p>
+            <strong>DNI:</strong> #{u.dni} |
+            <strong>Email:</strong> #{u.email} |
+            <strong>Edad:</strong>
+            <h:outputText value="#{u.edad}" styleClass="#{u.edad lt 18 ? 'menor' : 'mayor'}"/> |
+            <strong>Teléfono:</strong> #{u.telefono}
+        </p>
+
+        <h:dataTable value="#{u.pagos.entrySet()}" var="p" styleClass="pagos">
+            <h:column>
+                <f:facet name="header">Mes</f:facet>
+                #{p.key}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Importe (€)</f:facet>
+                <h:outputText value="#{p.value}" rendered="#{p.value ne null}" styleClass="pagado"/>
+                <h:outputText value="NO PAGADO" rendered="#{p.value eq null}" styleClass="pendiente"/>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Estado</f:facet>
+                <h:outputText value="Pagado" rendered="#{p.value ne null}" styleClass="pagado"/>
+                <h:outputText value="Pendiente" rendered="#{p.value eq null}" styleClass="pendiente"/>
+            </h:column>
+        </h:dataTable>
+
+        <div class="total">
+            Total abonado en el año: <strong>#{helloBean.totalPagado(u)}</strong> €
+            <br/>
+             <h:outputText value="El usuario está al corriente de pagos"
+                          rendered="#{helloBean.estaAlDia(u)}" style="color:green"/>
+            <h:outputText value="El usuario no está al día con la cuota"
+                          rendered="#{!helloBean.estaAlDia(u)}" style="color:red"/>
+        </div>
+        <hr/>
+    </ui:repeat>
+</h:body>
+</html>
+

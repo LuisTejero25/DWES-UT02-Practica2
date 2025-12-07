@@ -1,11 +1,11 @@
 from django.shortcuts import render
 import json
 
-# Vista principal que muestra los datos de los usuarios y sus pagos mensuales
+# Vista principal que muestra los datos del usuario y sus pagos mensuales
 def usuario_pagos(request):
-    # Datos de los usuarios en formato JSON (simulan una fuente externa)
+    # Datos del usuario en formato JSON 
     usuario_json = """
-    [
+     [
         {
             "id": 1,
             "nombre": "Luis",
@@ -61,14 +61,15 @@ def usuario_pagos(request):
     ]
     """
 
-    # Convertir el JSON en una lista de diccionarios de Python
-    usuarios = json.loads(usuario_json)
+    # Convertir el JSON en un diccionario de Python
+    usuario = json.loads(usuario_json)
 
-    # Calcular el total pagado por cada usuario y añadirlo al diccionario
-    for u in usuarios:
-        u["total_pagado"] = sum(u["pagos"].values())
+    # Calcular el total pagado en el año sumando los valores del diccionario 'pagos'
+    total_pagado = sum(usuario["pagos"].values())
 
     # Renderizar la plantilla HTML y enviar los datos como contexto
     return render(request, 'usuarios/pagos.html', {
-        'usuarios': usuarios
+        'usuario': usuario,
+        'total_pagado': total_pagado
     })
+
